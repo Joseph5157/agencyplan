@@ -1,0 +1,672 @@
+openapi: 3.0.3
+info:
+  title: School Website Platform API
+  version: 0.1.0
+  description: >
+    Contracts for public website content delivery and authenticated admin
+    content management for a fixed-design school or college website.
+servers:
+  - url: http://localhost:8000/api
+tags:
+  - name: Public
+  - name: Admin Auth
+  - name: Admin Content
+paths:
+  /public/sections:
+    get:
+      tags: [Public]
+      summary: List published fixed sections for the public site
+      responses:
+        '200':
+          description: Published site sections
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SiteSection'
+  /public/notices:
+    get:
+      tags: [Public]
+      summary: List published notices
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 50
+      responses:
+        '200':
+          description: Published notices
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Notice'
+  /public/courses:
+    get:
+      tags: [Public]
+      summary: List published courses
+      responses:
+        '200':
+          description: Published courses
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Course'
+  /public/faculty:
+    get:
+      tags: [Public]
+      summary: List published faculty profiles
+      responses:
+        '200':
+          description: Published faculty profiles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/FacultyProfile'
+  /public/gallery:
+    get:
+      tags: [Public]
+      summary: List published gallery items
+      responses:
+        '200':
+          description: Published gallery items
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/GalleryItem'
+  /public/contact-details:
+    get:
+      tags: [Public]
+      summary: List published contact details
+      responses:
+        '200':
+          description: Published contact details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ContactDetail'
+  /admin/auth/login:
+    post:
+      tags: [Admin Auth]
+      summary: Authenticate an admin user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [email, password]
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Authenticated session created
+        '422':
+          description: Validation failed
+        '401':
+          description: Invalid credentials
+  /admin/auth/logout:
+    post:
+      tags: [Admin Auth]
+      summary: End the current admin session
+      responses:
+        '204':
+          description: Logged out
+  /admin/dashboard:
+    get:
+      tags: [Admin Content]
+      summary: Load admin dashboard summary
+      responses:
+        '200':
+          description: Dashboard data
+  /admin/notices:
+    get:
+      tags: [Admin Content]
+      summary: List notices for management
+      responses:
+        '200':
+          description: Notice collection
+    post:
+      tags: [Admin Content]
+      summary: Create a notice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoticeInput'
+      responses:
+        '201':
+          description: Notice created
+        '422':
+          description: Validation failed
+  /admin/notices/{noticeId}:
+    parameters:
+      - $ref: '#/components/parameters/NoticeId'
+    get:
+      tags: [Admin Content]
+      summary: Get a single notice
+      responses:
+        '200':
+          description: Notice detail
+    put:
+      tags: [Admin Content]
+      summary: Update a notice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoticeInput'
+      responses:
+        '200':
+          description: Notice updated
+        '422':
+          description: Validation failed
+    delete:
+      tags: [Admin Content]
+      summary: Remove a notice
+      responses:
+        '204':
+          description: Notice removed
+  /admin/courses:
+    get:
+      tags: [Admin Content]
+      summary: List courses for management
+      responses:
+        '200':
+          description: Course collection
+    post:
+      tags: [Admin Content]
+      summary: Create a course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseInput'
+      responses:
+        '201':
+          description: Course created
+  /admin/courses/{courseId}:
+    parameters:
+      - $ref: '#/components/parameters/CourseId'
+    get:
+      tags: [Admin Content]
+      summary: Get a single course
+      responses:
+        '200':
+          description: Course detail
+    put:
+      tags: [Admin Content]
+      summary: Update a course
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseInput'
+      responses:
+        '200':
+          description: Course updated
+    delete:
+      tags: [Admin Content]
+      summary: Remove a course
+      responses:
+        '204':
+          description: Course removed
+  /admin/faculty:
+    get:
+      tags: [Admin Content]
+      summary: List faculty profiles for management
+      responses:
+        '200':
+          description: Faculty collection
+    post:
+      tags: [Admin Content]
+      summary: Create a faculty profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyProfileInput'
+      responses:
+        '201':
+          description: Faculty profile created
+  /admin/faculty/{facultyId}:
+    parameters:
+      - $ref: '#/components/parameters/FacultyId'
+    get:
+      tags: [Admin Content]
+      summary: Get a single faculty profile
+      responses:
+        '200':
+          description: Faculty profile detail
+    put:
+      tags: [Admin Content]
+      summary: Update a faculty profile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FacultyProfileInput'
+      responses:
+        '200':
+          description: Faculty profile updated
+    delete:
+      tags: [Admin Content]
+      summary: Remove a faculty profile
+      responses:
+        '204':
+          description: Faculty profile removed
+  /admin/gallery:
+    get:
+      tags: [Admin Content]
+      summary: List gallery items for management
+      responses:
+        '200':
+          description: Gallery collection
+    post:
+      tags: [Admin Content]
+      summary: Create a gallery item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GalleryItemInput'
+      responses:
+        '201':
+          description: Gallery item created
+  /admin/gallery/{galleryItemId}:
+    parameters:
+      - $ref: '#/components/parameters/GalleryItemId'
+    get:
+      tags: [Admin Content]
+      summary: Get a single gallery item
+      responses:
+        '200':
+          description: Gallery item detail
+    put:
+      tags: [Admin Content]
+      summary: Update a gallery item
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GalleryItemInput'
+      responses:
+        '200':
+          description: Gallery item updated
+    delete:
+      tags: [Admin Content]
+      summary: Remove a gallery item
+      responses:
+        '204':
+          description: Gallery item removed
+  /admin/contact-details:
+    get:
+      tags: [Admin Content]
+      summary: List contact detail records for management
+      responses:
+        '200':
+          description: Contact detail collection
+    post:
+      tags: [Admin Content]
+      summary: Create a contact detail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDetailInput'
+      responses:
+        '201':
+          description: Contact detail created
+  /admin/contact-details/{contactDetailId}:
+    parameters:
+      - $ref: '#/components/parameters/ContactDetailId'
+    get:
+      tags: [Admin Content]
+      summary: Get a single contact detail
+      responses:
+        '200':
+          description: Contact detail
+    put:
+      tags: [Admin Content]
+      summary: Update a contact detail
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactDetailInput'
+      responses:
+        '200':
+          description: Contact detail updated
+    delete:
+      tags: [Admin Content]
+      summary: Remove a contact detail
+      responses:
+        '204':
+          description: Contact detail removed
+  /admin/sections:
+    get:
+      tags: [Admin Content]
+      summary: List fixed site sections available for content editing
+      responses:
+        '200':
+          description: Site section collection
+    put:
+      tags: [Admin Content]
+      summary: Bulk update predefined site sections
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sections:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/SiteSectionInput'
+      responses:
+        '200':
+          description: Sections updated
+  /admin/media:
+    post:
+      tags: [Admin Content]
+      summary: Upload an image asset
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [file, alt_text]
+              properties:
+                file:
+                  type: string
+                  format: binary
+                alt_text:
+                  type: string
+      responses:
+        '201':
+          description: Media uploaded
+        '422':
+          description: Validation failed
+components:
+  parameters:
+    NoticeId:
+      name: noticeId
+      in: path
+      required: true
+      schema:
+        type: integer
+    CourseId:
+      name: courseId
+      in: path
+      required: true
+      schema:
+        type: integer
+    FacultyId:
+      name: facultyId
+      in: path
+      required: true
+      schema:
+        type: integer
+    GalleryItemId:
+      name: galleryItemId
+      in: path
+      required: true
+      schema:
+        type: integer
+    ContactDetailId:
+      name: contactDetailId
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    SiteSection:
+      type: object
+      properties:
+        id:
+          type: integer
+        key:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        image_asset_id:
+          type: integer
+          nullable: true
+    SiteSectionInput:
+      type: object
+      required: [key]
+      properties:
+        key:
+          type: string
+        title:
+          type: string
+        body:
+          type: string
+        image_asset_id:
+          type: integer
+          nullable: true
+        is_published:
+          type: boolean
+    Notice:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        summary:
+          type: string
+        body:
+          type: string
+        publish_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+    NoticeInput:
+      type: object
+      required: [title, publish_date]
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        body:
+          type: string
+        publish_date:
+          type: string
+          format: date
+        expiry_date:
+          type: string
+          format: date
+          nullable: true
+        is_published:
+          type: boolean
+    Course:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        slug:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        duration:
+          type: string
+        eligibility:
+          type: string
+    CourseInput:
+      type: object
+      required: [name, slug, summary, duration]
+      properties:
+        name:
+          type: string
+        slug:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        duration:
+          type: string
+        eligibility:
+          type: string
+        intake_capacity:
+          type: integer
+          nullable: true
+        is_published:
+          type: boolean
+    FacultyProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        designation:
+          type: string
+        department:
+          type: string
+        bio:
+          type: string
+        photo_asset_id:
+          type: integer
+          nullable: true
+    FacultyProfileInput:
+      type: object
+      required: [name, designation]
+      properties:
+        name:
+          type: string
+        designation:
+          type: string
+        department:
+          type: string
+        bio:
+          type: string
+        photo_asset_id:
+          type: integer
+          nullable: true
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+        is_published:
+          type: boolean
+    GalleryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        caption:
+          type: string
+        media_asset_id:
+          type: integer
+        category:
+          type: string
+        event_date:
+          type: string
+          format: date
+          nullable: true
+    GalleryItemInput:
+      type: object
+      required: [media_asset_id]
+      properties:
+        title:
+          type: string
+        caption:
+          type: string
+        media_asset_id:
+          type: integer
+        category:
+          type: string
+        event_date:
+          type: string
+          format: date
+          nullable: true
+        is_published:
+          type: boolean
+    ContactDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+        is_primary:
+          type: boolean
+    ContactDetailInput:
+      type: object
+      required: [label, type, value]
+      properties:
+        label:
+          type: string
+        type:
+          type: string
+        value:
+          type: string
+        is_primary:
+          type: boolean
+        is_published:
+          type: boolean

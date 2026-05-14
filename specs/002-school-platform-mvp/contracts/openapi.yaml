@@ -1,0 +1,331 @@
+openapi: 3.0.3
+info:
+  title: School Website Platform MVP API
+  version: 0.1.0
+  description: >
+    Domain-aware multi-tenant API contracts for the School Website Platform MVP,
+    covering public school website content and authenticated school admin editing.
+servers:
+  - url: https://api.yourdomain.com
+tags:
+  - name: Public
+  - name: Admin Auth
+  - name: Admin Content
+paths:
+  /api/school:
+    get:
+      tags: [Public]
+      summary: Load school identity and assigned template for the resolved domain
+      responses:
+        '200':
+          description: School identity payload
+  /api/school/hero:
+    get:
+      tags: [Public]
+      summary: Load hero content and slides for the resolved school
+      responses:
+        '200':
+          description: Hero section payload
+  /api/admin/hero:
+    put:
+      tags: [Admin Content]
+      summary: Update hero content for the authenticated school
+      responses:
+        '200':
+          description: Hero updated
+  /api/admin/hero/slides:
+    post:
+      tags: [Admin Content]
+      summary: Upload and add a hero slide for the authenticated school
+      responses:
+        '201':
+          description: Hero slide created
+  /api/admin/hero/slides/{slideId}:
+    delete:
+      tags: [Admin Content]
+      summary: Delete a hero slide for the authenticated school
+      parameters:
+        - name: slideId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Hero slide deleted
+  /api/school/about:
+    get:
+      tags: [Public]
+      summary: Load about section content
+      responses:
+        '200':
+          description: About content payload
+  /api/admin/about:
+    put:
+      tags: [Admin Content]
+      summary: Update about section content
+      responses:
+        '200':
+          description: About content updated
+  /api/school/stats:
+    get:
+      tags: [Public]
+      summary: Load stats items
+      responses:
+        '200':
+          description: Stats payload
+  /api/admin/stats:
+    put:
+      tags: [Admin Content]
+      summary: Bulk update stats ordering and values
+      responses:
+        '200':
+          description: Stats updated
+    post:
+      tags: [Admin Content]
+      summary: Create a stat item
+      responses:
+        '201':
+          description: Stat created
+  /api/admin/stats/{statId}:
+    delete:
+      tags: [Admin Content]
+      summary: Delete a stat item
+      parameters:
+        - name: statId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Stat deleted
+  /api/school/facilities:
+    get:
+      tags: [Public]
+      summary: Load facilities
+      responses:
+        '200':
+          description: Facilities payload
+  /api/admin/facilities:
+    post:
+      tags: [Admin Content]
+      summary: Create a facility item
+      responses:
+        '201':
+          description: Facility created
+  /api/admin/facilities/{facilityId}:
+    put:
+      tags: [Admin Content]
+      summary: Update a facility item
+      parameters:
+        - name: facilityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Facility updated
+    delete:
+      tags: [Admin Content]
+      summary: Delete a facility item
+      parameters:
+        - name: facilityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Facility deleted
+  /api/school/faculty:
+    get:
+      tags: [Public]
+      summary: Load faculty profiles
+      responses:
+        '200':
+          description: Faculty payload
+  /api/admin/faculty:
+    post:
+      tags: [Admin Content]
+      summary: Create a faculty profile
+      responses:
+        '201':
+          description: Faculty profile created
+  /api/admin/faculty/{facultyId}:
+    put:
+      tags: [Admin Content]
+      summary: Update a faculty profile
+      parameters:
+        - name: facultyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Faculty profile updated
+    delete:
+      tags: [Admin Content]
+      summary: Delete a faculty profile
+      parameters:
+        - name: facultyId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Faculty profile deleted
+  /api/school/gallery:
+    get:
+      tags: [Public]
+      summary: Load gallery items
+      responses:
+        '200':
+          description: Gallery payload
+  /api/admin/gallery:
+    post:
+      tags: [Admin Content]
+      summary: Create a gallery item
+      responses:
+        '201':
+          description: Gallery item created
+  /api/admin/gallery/{galleryId}:
+    delete:
+      tags: [Admin Content]
+      summary: Delete a gallery item
+      parameters:
+        - name: galleryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Gallery item deleted
+  /api/school/notices:
+    get:
+      tags: [Public]
+      summary: Load active notices for the school
+      responses:
+        '200':
+          description: Notice payload
+  /api/admin/notices:
+    post:
+      tags: [Admin Content]
+      summary: Create a notice
+      responses:
+        '201':
+          description: Notice created
+  /api/admin/notices/{noticeId}:
+    put:
+      tags: [Admin Content]
+      summary: Update a notice
+      parameters:
+        - name: noticeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Notice updated
+    delete:
+      tags: [Admin Content]
+      summary: Delete a notice
+      parameters:
+        - name: noticeId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Notice deleted
+  /api/school/testimonials:
+    get:
+      tags: [Public]
+      summary: Load testimonials
+      responses:
+        '200':
+          description: Testimonial payload
+  /api/admin/testimonials:
+    post:
+      tags: [Admin Content]
+      summary: Create a testimonial
+      responses:
+        '201':
+          description: Testimonial created
+  /api/admin/testimonials/{testimonialId}:
+    put:
+      tags: [Admin Content]
+      summary: Update a testimonial
+      parameters:
+        - name: testimonialId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Testimonial updated
+    delete:
+      tags: [Admin Content]
+      summary: Delete a testimonial
+      parameters:
+        - name: testimonialId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Testimonial deleted
+  /api/school/contact:
+    get:
+      tags: [Public]
+      summary: Load contact information
+      responses:
+        '200':
+          description: Contact payload
+  /api/admin/contact:
+    put:
+      tags: [Admin Content]
+      summary: Update contact information
+      responses:
+        '200':
+          description: Contact information updated
+  /api/school/settings:
+    get:
+      tags: [Public]
+      summary: Load footer and SEO settings
+      responses:
+        '200':
+          description: School settings payload
+  /api/admin/settings:
+    put:
+      tags: [Admin Content]
+      summary: Update school settings
+      responses:
+        '200':
+          description: Settings updated
+  /api/admin/login:
+    post:
+      tags: [Admin Auth]
+      summary: Authenticate a school admin and issue a JWT token
+      responses:
+        '200':
+          description: Authenticated
+        '401':
+          description: Invalid credentials
+  /api/admin/upload:
+    post:
+      tags: [Admin Content]
+      summary: Upload an approved image or PDF asset for the authenticated school
+      responses:
+        '201':
+          description: Upload accepted
+        '422':
+          description: Upload validation failed

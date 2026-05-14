@@ -1,0 +1,1 @@
+import{g as s,G as n,j as a,l as r,c,o as d}from"./DqBQ09Ny.js";const l={class:"rounded-lg border border-slate-200 bg-white p-4 text-sm text-slate-600"},m=s({__name:"index",setup(u){const e=n(),{token:t,loadToken:o}=a();return r(async()=>{o(),await e.replace(t.value?"/dashboard":"/login")}),(i,_)=>(d(),c("section",l," Redirecting... "))}});export{m as default};
